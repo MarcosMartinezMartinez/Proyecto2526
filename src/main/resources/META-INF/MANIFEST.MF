@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: es.ieslavereda.proyectospringboot2526.ProyectoSpringBoot2526
+ Application
+
