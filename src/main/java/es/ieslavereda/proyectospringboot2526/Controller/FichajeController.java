@@ -1,63 +1,70 @@
 package es.ieslavereda.proyectospringboot2526.Controller;
 
-import es.ieslavereda.proyectospringboot2526.repository.model.Fichaje;
 import es.ieslavereda.proyectospringboot2526.Service.FichajeService;
+import es.ieslavereda.proyectospringboot2526.repository.model.Fichaje;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
+import java.util.List;
 
 @RestController
-@RequestMapping(value = "fichaje")
+@RequestMapping("/fichaje")
 public class FichajeController {
 
     @Autowired
     private FichajeService fichajeService;
 
+    // Obtener todos los fichajes
     @GetMapping
-    public ResponseEntity<?> getAllFichajes() {
-        try {
-            return new ResponseEntity<>(fichajeService.getAllFichajes(), HttpStatus.OK);
-        } catch (SQLException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<List<Fichaje>> getAllFichajes() {
+        return ResponseEntity.ok(fichajeService.getAllFichajes());
     }
 
-    @GetMapping(value = "{id}")
-    public ResponseEntity<?> getFichaje(@PathVariable("id") int id) {
-        try {
-            return new ResponseEntity<>(fichajeService.getFichaje(id), HttpStatus.OK);
-        } catch (SQLException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    // Obtener un fichaje por id
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getFichaje(@PathVariable int id) {
+        Fichaje fichaje = fichajeService.getFichaje(id);
+        if (fichaje == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Fichaje no encontrado");
         }
+        return ResponseEntity.ok(fichaje);
     }
 
-    @DeleteMapping(value = "{id}")
-    public ResponseEntity<?> deleteFichaje(@PathVariable("id") int id) {
-        try {
-            return new ResponseEntity<>(fichajeService.deleteFichaje(id), HttpStatus.OK);
-        } catch (SQLException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    // Obtener fichajes por empleado
+    @GetMapping("/empleado/{idEmpleado}")
+    public ResponseEntity<?> getFichajesByEmpleado(@PathVariable int idEmpleado) {
+        List<Fichaje> fichajes = fichajeService.getFichajesByEmpleado(idEmpleado);
+        if (fichajes.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontraron fichajes para este empleado");
         }
+        return ResponseEntity.ok(fichajes);
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateFichaje(@RequestBody Fichaje fichaje) {
-        try {
-            return new ResponseEntity<>(fichajeService.updateFichaje(fichaje), HttpStatus.OK);
-        } catch (SQLException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
+    // Crear un fichaje
     @PostMapping
-    public ResponseEntity<?> addFichaje(@RequestBody Fichaje fichaje) {
-        try {
-            return new ResponseEntity<>(fichajeService.addFichaje(fichaje), HttpStatus.OK);
-        } catch (SQLException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Fichaje> addFichaje(@RequestBody Fichaje fichaje) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(fichajeService.addFichaje(fichaje));
+    }
+
+    // Actualizar un fichaje
+    @PutMapping
+    public ResponseEntity<Fichaje> updateFichaje(@RequestBody Fichaje fichaje) {
+        return ResponseEntity.ok(fichajeService.updateFichaje(fichaje));
+    }
+
+    // Eliminar un fichaje por id
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteFichaje(@PathVariable int id) {
+        Fichaje fichaje = fichajeService.deleteFichaje(id);
+        if (fichaje == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Fichaje no encontrado");
         }
+        return ResponseEntity.ok(fichaje);
     }
 }

@@ -5,7 +5,6 @@ import es.ieslavereda.proyectospringboot2526.repository.model.Turno;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -14,23 +13,31 @@ public class TurnoService {
     @Autowired
     private TurnoRepository turnoRepository;
 
-    public List<Turno> getAllTurnos() throws SQLException {
-        return turnoRepository.getAllTurnos();
+    public List<Turno> getAllTurnos() {
+        return turnoRepository.findAll();
     }
 
-    public Turno getTurno(int id_turno) throws SQLException {
-        return turnoRepository.getTurno(id_turno);
+    public Turno getTurnoById(int id) {
+        return turnoRepository.findById(id).orElse(null);
     }
 
-    public Turno deleteTurno(int id_turno) throws SQLException {
-        return turnoRepository.deleteTurno(id_turno);
+    public List<Turno> getTurnosByEmpleado(int idEmpleado) {
+        return turnoRepository.findByIdEmpleado(idEmpleado);
     }
 
-    public Turno updateTurno(Turno turno) throws SQLException {
-        return turnoRepository.updateTurno(turno);
+    public Turno addTurno(Turno turno) {
+        return turnoRepository.save(turno);
     }
 
-    public Turno addTurno(Turno turno) throws SQLException {
-        return turnoRepository.addTurno(turno);
+    public Turno updateTurno(Turno turno) {
+        return turnoRepository.save(turno);
+    }
+
+    public Turno deleteTurno(int id) {
+        Turno turno = getTurnoById(id);
+        if (turno != null) {
+            turnoRepository.delete(turno);
+        }
+        return turno;
     }
 }

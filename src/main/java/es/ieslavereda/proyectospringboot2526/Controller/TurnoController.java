@@ -1,42 +1,56 @@
 package es.ieslavereda.proyectospringboot2526.Controller;
 
-import es.ieslavereda.proyectospringboot2526.repository.model.Turno;
 import es.ieslavereda.proyectospringboot2526.Service.TurnoService;
+import es.ieslavereda.proyectospringboot2526.repository.model.Turno;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/turnos")
+@RequestMapping("/turno")
 public class TurnoController {
 
     @Autowired
     private TurnoService turnoService;
 
     @GetMapping
-    public List<Turno> getAllTurnos() throws SQLException {
-        return turnoService.getAllTurnos();
+    public ResponseEntity<List<Turno>> getAllTurnos() {
+        return ResponseEntity.ok(turnoService.getAllTurnos());
     }
 
     @GetMapping("/{id}")
-    public Turno getTurno(@PathVariable int id) throws SQLException {
-        return turnoService.getTurno(id);
+    public ResponseEntity<?> getTurno(@PathVariable int id) {
+        Turno turno = turnoService.getTurnoById(id);
+        if (turno == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(turno);
     }
 
-    @DeleteMapping("/{id}")
-    public Turno deleteTurno(@PathVariable int id) throws SQLException {
-        return turnoService.deleteTurno(id);
-    }
-
-    @PutMapping
-    public Turno updateTurno(@RequestBody Turno turno) throws SQLException {
-        return turnoService.updateTurno(turno);
+    // 🔥 FILTRAR TURNOS POR EMPLEADO
+    @GetMapping("/empleado/{idEmpleado}")
+    public ResponseEntity<List<Turno>> getTurnosByEmpleado(@PathVariable int idEmpleado) {
+        return ResponseEntity.ok(turnoService.getTurnosByEmpleado(idEmpleado));
     }
 
     @PostMapping
-    public Turno addTurno(@RequestBody Turno turno) throws SQLException {
-        return turnoService.addTurno(turno);
+    public ResponseEntity<Turno> addTurno(@RequestBody Turno turno) {
+        return ResponseEntity.ok(turnoService.addTurno(turno));
+    }
+
+    @PutMapping
+    public ResponseEntity<Turno> updateTurno(@RequestBody Turno turno) {
+        return ResponseEntity.ok(turnoService.updateTurno(turno));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTurno(@PathVariable int id) {
+        Turno turno = turnoService.deleteTurno(id);
+        if (turno == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(turno);
     }
 }

@@ -5,8 +5,8 @@ import es.ieslavereda.proyectospringboot2526.repository.model.Fichaje;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FichajeService {
@@ -14,23 +14,38 @@ public class FichajeService {
     @Autowired
     private FichajeRepository fichajeRepository;
 
-    public List<Fichaje> getAllFichajes() throws SQLException {
-        return fichajeRepository.getAllFichajes();
+    // Obtener todos los fichajes
+    public List<Fichaje> getAllFichajes() {
+        return fichajeRepository.findAll();
     }
 
-    public Fichaje getFichaje(int idFichaje) throws SQLException {
-        return fichajeRepository.getFichaje(idFichaje);
+    // Obtener un fichaje por id
+    public Fichaje getFichaje(int id) {
+        Optional<Fichaje> fichaje = fichajeRepository.findById(id);
+        return fichaje.orElse(null);
     }
 
-    public Fichaje deleteFichaje(int idFichaje) throws SQLException {
-        return fichajeRepository.deleteFichaje(idFichaje);
+    // Obtener fichajes por empleado
+    public List<Fichaje> getFichajesByEmpleado(int idEmpleado) {
+        return fichajeRepository.findByIdEmpleado(idEmpleado);
     }
 
-    public Fichaje updateFichaje(Fichaje fichaje) throws SQLException {
-        return fichajeRepository.updateFichaje(fichaje);
+    // Crear un fichaje
+    public Fichaje addFichaje(Fichaje fichaje) {
+        return fichajeRepository.save(fichaje);
     }
 
-    public Fichaje addFichaje(Fichaje fichaje) throws SQLException {
-        return fichajeRepository.addFichaje(fichaje);
+    // Actualizar un fichaje
+    public Fichaje updateFichaje(Fichaje fichaje) {
+        return fichajeRepository.save(fichaje);
+    }
+
+    // Eliminar un fichaje por id
+    public Fichaje deleteFichaje(int id) {
+        Fichaje fichaje = getFichaje(id);
+        if (fichaje != null) {
+            fichajeRepository.delete(fichaje);
+        }
+        return fichaje;
     }
 }
