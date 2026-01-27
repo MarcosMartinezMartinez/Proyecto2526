@@ -33,6 +33,7 @@ public class FichajeController {
         return ResponseEntity.ok(fichaje);
     }
 
+
     // Obtener fichajes por empleado
     @GetMapping("/empleado/{idEmpleado}")
     public ResponseEntity<?> getFichajesByEmpleado(@PathVariable int idEmpleado) {
