@@ -44,6 +44,7 @@ public class FichajeController {
         return ResponseEntity.ok(fichajes);
     }
 
+
     // Crear un fichaje
     @PostMapping
     public ResponseEntity<Fichaje> addFichaje(@RequestBody Fichaje fichaje) {
