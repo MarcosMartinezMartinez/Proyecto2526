@@ -29,3 +29,4 @@ public class Turno {
     @Column(name = "tipo_turno", nullable = false)
     private String tipoTurno;
 }
+

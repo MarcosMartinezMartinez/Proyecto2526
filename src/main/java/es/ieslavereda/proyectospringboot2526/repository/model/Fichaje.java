@@ -26,3 +26,4 @@ public class Fichaje {
     @Column(name = "tipo", nullable = false)
     private String tipo;
 }
+

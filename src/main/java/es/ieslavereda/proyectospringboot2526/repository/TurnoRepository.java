@@ -11,3 +11,4 @@ public interface TurnoRepository extends JpaRepository<Turno, Integer> {
     List<Turno> findByIdEmpleado(int idEmpleado);
 
 }
+

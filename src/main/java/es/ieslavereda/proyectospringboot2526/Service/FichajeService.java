@@ -26,6 +26,7 @@ public class FichajeService {
     }
 
     // Obtener fichajes por empleado
+
     public List<Fichaje> getFichajesByEmpleado(int idEmpleado) {
         return fichajeRepository.findByIdEmpleado(idEmpleado);
     }

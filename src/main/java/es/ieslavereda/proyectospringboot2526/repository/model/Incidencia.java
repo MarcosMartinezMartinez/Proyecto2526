@@ -69,3 +69,4 @@ public class Incidencia {
         this.descripcion = descripcion;
     }
 }
+

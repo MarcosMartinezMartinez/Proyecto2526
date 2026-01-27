@@ -12,3 +12,4 @@ public interface FichajeRepository extends JpaRepository<Fichaje, Integer> {
     List<Fichaje> findByIdEmpleado(int idEmpleado);
 
 }
+

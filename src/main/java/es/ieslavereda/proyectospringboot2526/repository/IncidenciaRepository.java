@@ -11,3 +11,4 @@ public interface IncidenciaRepository extends JpaRepository<Incidencia, Integer>
 
     List<Incidencia> findByIdEmpleado(int idEmpleado);
 }
+

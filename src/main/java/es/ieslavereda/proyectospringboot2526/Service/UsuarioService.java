@@ -47,6 +47,7 @@ public class UsuarioService {
         return usuario;
     }
 
+
     // Eliminar un usuario por ID
     public Usuario deleteUsuarioById(int id) {
         Usuario usuario = getUsuarioById(id);

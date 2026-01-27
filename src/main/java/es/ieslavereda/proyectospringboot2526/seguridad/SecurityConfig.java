@@ -27,6 +27,7 @@ public class SecurityConfig {
                 // Autenticación HTTP Basic
                 .httpBasic(Customizer.withDefaults());
 
+
         return http.build();
     }
 

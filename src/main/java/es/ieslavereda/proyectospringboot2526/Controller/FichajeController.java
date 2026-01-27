@@ -69,4 +69,5 @@ public class FichajeController {
         }
         return ResponseEntity.ok(fichaje);
     }
+
 }
