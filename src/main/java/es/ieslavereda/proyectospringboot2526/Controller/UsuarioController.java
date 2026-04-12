@@ -54,6 +54,16 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
+    // Eliminar un usuario por ID
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<?> deleteUsuarioById(@PathVariable int id) {
+        Usuario usuario = usuarioService.deleteUsuarioById(id);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        }
+        return ResponseEntity.ok(usuario);
+    }
+
     @GetMapping("/id/{id}")
     public ResponseEntity<?> getUsuarioById(@PathVariable int id) {
         Usuario usuario = usuarioService.getUsuarioById(id);

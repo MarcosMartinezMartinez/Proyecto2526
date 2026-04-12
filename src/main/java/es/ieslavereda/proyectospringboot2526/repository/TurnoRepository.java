@@ -8,7 +8,12 @@ import java.util.List;
 
 @Repository
 public interface TurnoRepository extends JpaRepository<Turno, Integer> {
+
     List<Turno> findByIdEmpleado(int idEmpleado);
 
+    boolean existsByIdEmpleadoAndTipoTurnoAndFechaInicioStartingWith(
+            int idEmpleado,
+            String tipoTurno,
+            String fechaInicio
+    );
 }
-

@@ -1,13 +1,7 @@
 package es.ieslavereda.proyectospringboot2526.repository.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "turnos")
 public class Turno {
@@ -28,5 +22,58 @@ public class Turno {
 
     @Column(name = "tipo_turno", nullable = false)
     private String tipoTurno;
-}
 
+
+
+    public Turno() {
+    }
+
+    public Turno(int idTurno, int idEmpleado, String fechaInicio, String fechaFin, String tipoTurno) {
+        this.idTurno = idTurno;
+        this.idEmpleado = idEmpleado;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.tipoTurno = tipoTurno;
+    }
+
+
+    public int getIdTurno() {
+        return idTurno;
+    }
+
+    public void setIdTurno(int idTurno) {
+        this.idTurno = idTurno;
+    }
+
+    public int getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(int idEmpleado) {
+        this.idEmpleado = idEmpleado;
+    }
+
+    public String getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public String getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public String getTipoTurno() {
+        return tipoTurno;
+    }
+
+    public void setTipoTurno(String tipoTurno) {
+        this.tipoTurno = tipoTurno;
+    }
+}

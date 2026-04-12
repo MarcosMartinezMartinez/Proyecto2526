@@ -13,47 +13,63 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // Obtener todos los usuarios
+    @Autowired
+    private TurnoService turnoService;
+
+
+
     public List<Usuario> getAllUsuarios() {
         return usuarioRepository.findAll();
     }
 
-    // Obtener un usuario por ID
+
+
     public Usuario getUsuarioById(int id) {
         return usuarioRepository.findById(id).orElse(null);
     }
 
-    // ✅ Obtener un usuario por nombre
+
     public Usuario getUsuarioPorNombre(String nombre) {
         return usuarioRepository.findByNombre(nombre).orElse(null);
     }
 
-    // Añadir un usuario
+
+
     public Usuario addUsuario(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+
+        Usuario u = usuarioRepository.save(usuario);
+
+        turnoService.generarTurnosParaNuevoUsuario(u);
+
+        return u;
     }
 
-    // Actualizar un usuario
+
     public Usuario updateUsuario(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
 
-    // Eliminar un usuario por nombre
+
     public Usuario deleteUsuarioPorNombre(String nombre) {
+
         Usuario usuario = getUsuarioPorNombre(nombre);
+
         if (usuario != null) {
             usuarioRepository.delete(usuario);
         }
+
         return usuario;
     }
 
 
-    // Eliminar un usuario por ID
     public Usuario deleteUsuarioById(int id) {
+
         Usuario usuario = getUsuarioById(id);
+
         if (usuario != null) {
             usuarioRepository.delete(usuario);
         }
+
         return usuario;
     }
 }
