@@ -67,13 +67,18 @@ public class TurnoService {
 
         List<Usuario> usuarios = usuarioRepository.findAll();
 
-        for (Usuario u : usuarios) {
+        List<Usuario> produccion = usuarios.stream()
+                .filter(u -> "PRODUCCIÓN".equals(u.getTipoPuesto()))
+                .toList();
 
-            if ("PRODUCCIÓN".equals(u.getTipoPuesto())) {
-                generarProduccion(u, inicio, fin);
-            } else {
-                generarOficina(u, inicio, fin);
-            }
+        List<Usuario> oficina = usuarios.stream()
+                .filter(u -> !"PRODUCCIÓN".equals(u.getTipoPuesto()))
+                .toList();
+
+        generarProduccion(produccion, inicio, fin);
+
+        for (Usuario u : oficina) {
+            generarOficina(u, inicio, fin);
         }
     }
 
@@ -81,42 +86,45 @@ public class TurnoService {
     // PRODUCCIÓN
     // =========================================================
 
-    public void generarProduccion(Usuario u, LocalDate inicio, LocalDate fin) {
-
-        int diaLaboral = 0;
+    public void generarProduccion(List<Usuario> usuarios, LocalDate inicio, LocalDate fin) {
 
         for (LocalDate fecha = inicio; !fecha.isAfter(fin); fecha = fecha.plusDays(1)) {
 
             if (fecha.getDayOfWeek().getValue() <= 5) {
 
-                int bloque = (diaLaboral / 5) % 3;
+                int semanaDelMes = (fecha.getDayOfMonth() - 1) / 7;
 
-                String tipo = switch (bloque) {
-                    case 0 -> "MAÑANA";
-                    case 1 -> "TARDE";
-                    default -> "NOCHE";
-                };
+                for (int i = 0; i < usuarios.size(); i++) {
 
-                if (turnoExiste(u.getIdEmpleado(), tipo, fecha)) continue;
+                    Usuario u = usuarios.get(i);
 
-                Turno t = new Turno();
-                t.setIdEmpleado(u.getIdEmpleado());
-                t.setTipoTurno(tipo);
+                    int turnoIndex = (i + semanaDelMes) % 3;
 
-                if (tipo.equals("MAÑANA")) {
-                    t.setFechaInicio(fecha + "T06:00");
-                    t.setFechaFin(fecha + "T14:00");
-                } else if (tipo.equals("TARDE")) {
-                    t.setFechaInicio(fecha + "T14:00");
-                    t.setFechaFin(fecha + "T22:00");
-                } else {
-                    t.setFechaInicio(fecha + "T22:00");
-                    t.setFechaFin(fecha.plusDays(1) + "T06:00");
+                    String tipo = switch (turnoIndex) {
+                        case 0 -> "MAÑANA";
+                        case 1 -> "TARDE";
+                        default -> "NOCHE";
+                    };
+
+                    if (turnoExiste(u.getIdEmpleado(), tipo, fecha)) continue;
+
+                    Turno t = new Turno();
+                    t.setIdEmpleado(u.getIdEmpleado());
+                    t.setTipoTurno(tipo);
+
+                    if (tipo.equals("MAÑANA")) {
+                        t.setFechaInicio(fecha + "T06:00");
+                        t.setFechaFin(fecha + "T14:00");
+                    } else if (tipo.equals("TARDE")) {
+                        t.setFechaInicio(fecha + "T14:00");
+                        t.setFechaFin(fecha + "T22:00");
+                    } else {
+                        t.setFechaInicio(fecha + "T22:00");
+                        t.setFechaFin(fecha.plusDays(1) + "T06:00");
+                    }
+
+                    turnoRepository.save(t);
                 }
-
-                turnoRepository.save(t);
-
-                diaLaboral++;
             }
         }
     }
