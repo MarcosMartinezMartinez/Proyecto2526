@@ -87,19 +87,12 @@ public class TurnoService {
     // =========================================================
 
     public void generarProduccion(List<Usuario> usuarios, LocalDate inicio, LocalDate fin) {
-
         for (LocalDate fecha = inicio; !fecha.isAfter(fin); fecha = fecha.plusDays(1)) {
-
             if (fecha.getDayOfWeek().getValue() <= 5) {
-
                 int semanaDelMes = (fecha.getDayOfMonth() - 1) / 7;
-
                 for (int i = 0; i < usuarios.size(); i++) {
-
                     Usuario u = usuarios.get(i);
-
                     int turnoIndex = (i + semanaDelMes) % 3;
-
                     String tipo = switch (turnoIndex) {
                         case 0 -> "MAÑANA";
                         case 1 -> "TARDE";
@@ -107,7 +100,6 @@ public class TurnoService {
                     };
 
                     if (turnoExiste(u.getIdEmpleado(), tipo, fecha)) continue;
-
                     Turno t = new Turno();
                     t.setIdEmpleado(u.getIdEmpleado());
                     t.setTipoTurno(tipo);
@@ -122,7 +114,6 @@ public class TurnoService {
                         t.setFechaInicio(fecha + "T22:00");
                         t.setFechaFin(fecha.plusDays(1) + "T06:00");
                     }
-
                     turnoRepository.save(t);
                 }
             }
