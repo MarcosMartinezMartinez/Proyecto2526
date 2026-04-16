@@ -1,13 +1,7 @@
 package es.ieslavereda.proyectospringboot2526.repository.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "fichajes")
 public class Fichaje {
@@ -25,5 +19,38 @@ public class Fichaje {
 
     @Column(name = "tipo", nullable = false)
     private String tipo;
-}
 
+    // ---- GETTERS Y SETTERS ----
+
+    public int getIdFichaje() {
+        return idFichaje;
+    }
+
+    public void setIdFichaje(int idFichaje) {
+        this.idFichaje = idFichaje;
+    }
+
+    public int getIdEmpleado() {
+        return idEmpleado;
+    }
+
+    public void setIdEmpleado(int idEmpleado) {
+        this.idEmpleado = idEmpleado;
+    }
+
+    public String getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(String fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+}

@@ -38,10 +38,6 @@ public class FichajeController {
     @GetMapping("/empleado/{idEmpleado}")
     public ResponseEntity<?> getFichajesByEmpleado(@PathVariable int idEmpleado) {
         List<Fichaje> fichajes = fichajeService.getFichajesByEmpleado(idEmpleado);
-        if (fichajes.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se encontraron fichajes para este empleado");
-        }
         return ResponseEntity.ok(fichajes);
     }
 
