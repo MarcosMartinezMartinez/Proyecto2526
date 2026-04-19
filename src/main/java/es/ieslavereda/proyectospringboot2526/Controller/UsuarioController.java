@@ -3,7 +3,6 @@ package es.ieslavereda.proyectospringboot2526.Controller;
 import es.ieslavereda.proyectospringboot2526.Service.UsuarioService;
 import es.ieslavereda.proyectospringboot2526.repository.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,62 +15,66 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    // Obtener todos los usuarios
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Usuario usuario) {
+
+        Usuario u = usuarioService.login(
+                usuario.getEmail(),
+                usuario.getContraseña()
+        );
+
+        if (u == null) {
+            return ResponseEntity.status(401).body("Credenciales incorrectas");
+        }
+
+        return ResponseEntity.ok(u);
+    }
+
     @GetMapping
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
         return ResponseEntity.ok(usuarioService.getAllUsuarios());
     }
 
-    // Obtener un usuario por nombre
-    @GetMapping("/nombre/{nombre}")
-    public ResponseEntity<?> getUsuarioByNombre(@PathVariable String nombre) {
-        Usuario usuario = usuarioService.getUsuarioPorNombre(nombre);
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
-        }
-        return ResponseEntity.ok(usuario);
-    }
-
-    // Crear un usuario
     @PostMapping
     public ResponseEntity<Usuario> addUsuario(@RequestBody Usuario usuario) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.addUsuario(usuario));
+        return ResponseEntity.ok(usuarioService.addUsuario(usuario));
     }
-
-    // Actualizar un usuario
-    @PutMapping
-    public ResponseEntity<Usuario> updateUsuario(@RequestBody Usuario usuario) {
-        return ResponseEntity.ok(usuarioService.updateUsuario(usuario));
-    }
-
-    // Eliminar un usuario por nombre
-    @DeleteMapping("/nombre/{nombre}")
-    public ResponseEntity<?> deleteUsuarioByNombre(@PathVariable String nombre) {
-        Usuario usuario = usuarioService.deleteUsuarioPorNombre(nombre);
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
-        }
-        return ResponseEntity.ok(usuario);
-    }
-
-    // Eliminar un usuario por ID
-    @DeleteMapping("/id/{id}")
-    public ResponseEntity<?> deleteUsuarioById(@PathVariable int id) {
-        Usuario usuario = usuarioService.deleteUsuarioById(id);
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
-        }
-        return ResponseEntity.ok(usuario);
-    }
-
     @GetMapping("/id/{id}")
-    public ResponseEntity<?> getUsuarioById(@PathVariable int id) {
+    public ResponseEntity<Usuario> getUsuarioById(@PathVariable int id) {
         Usuario usuario = usuarioService.getUsuarioById(id);
+
         if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            return ResponseEntity.notFound().build();
         }
+
         return ResponseEntity.ok(usuario);
     }
 
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<Void> deleteUsuario(@PathVariable int id) {
 
+        Usuario usuario = usuarioService.getUsuarioById(id);
+
+        if (usuario == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        usuarioService.deleteUsuario(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> updateUsuario(
+            @PathVariable int id,
+            @RequestBody Usuario usuario) {
+
+        Usuario actualizado = usuarioService.updateUsuario(id, usuario);
+
+        if (actualizado == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(actualizado);
+    }
 }

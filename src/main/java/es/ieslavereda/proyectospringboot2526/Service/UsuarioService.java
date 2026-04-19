@@ -3,6 +3,7 @@ package es.ieslavereda.proyectospringboot2526.Service;
 import es.ieslavereda.proyectospringboot2526.repository.UsuarioRepository;
 import es.ieslavereda.proyectospringboot2526.repository.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,62 +15,61 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private TurnoService turnoService;
-
-
+    private PasswordEncoder passwordEncoder;
 
     public List<Usuario> getAllUsuarios() {
         return usuarioRepository.findAll();
     }
 
-
-
     public Usuario getUsuarioById(int id) {
         return usuarioRepository.findById(id).orElse(null);
     }
 
-
-    public Usuario getUsuarioPorNombre(String nombre) {
-        return usuarioRepository.findByNombre(nombre).orElse(null);
+    public Usuario getUsuarioPorEmail(String email) {
+        return usuarioRepository.findByEmail(email);
     }
 
+    // 🔐 LOGIN REAL
+    public Usuario login(String email, String password) {
 
+        Usuario u = usuarioRepository.findByEmail(email);
 
+        if (u == null) return null;
+
+        if (passwordEncoder.matches(password, u.getContraseña())) {
+            return u;
+        }
+
+        return null;
+    }
+
+    // 🔐 CREAR USUARIO (ENCRIPTADO)
     public Usuario addUsuario(Usuario usuario) {
-
-        Usuario u = usuarioRepository.save(usuario);
-
-        turnoService.generarTurnosParaNuevoUsuario(u);
-
-        return u;
-    }
-
-
-    public Usuario updateUsuario(Usuario usuario) {
+        usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
         return usuarioRepository.save(usuario);
     }
 
-
-    public Usuario deleteUsuarioPorNombre(String nombre) {
-
-        Usuario usuario = getUsuarioPorNombre(nombre);
-
-        if (usuario != null) {
-            usuarioRepository.delete(usuario);
-        }
-
-        return usuario;
+    public void deleteUsuario(int id) {
+        usuarioRepository.deleteById(id);
     }
 
+    public Usuario updateUsuario(int id, Usuario datos) {
 
-    public Usuario deleteUsuarioById(int id) {
+        Usuario u = usuarioRepository.findById(id).orElse(null);
 
-        Usuario usuario = getUsuarioById(id);
+        if (u == null) return null;
 
-        if (usuario != null) {
-            usuarioRepository.delete(usuario);
+        u.setNombre(datos.getNombre());
+        u.setApellidos(datos.getApellidos());
+        u.setEmail(datos.getEmail());
+        u.setRol(datos.getRol());
+        u.setTipoPuesto(datos.getTipoPuesto());
+        u.setActivo(datos.isActivo());
+
+        if (datos.getContraseña() != null && !datos.getContraseña().isEmpty()) {
+            u.setContraseña(passwordEncoder.encode(datos.getContraseña()));
         }
 
-        return usuario;
+        return usuarioRepository.save(u);
     }
 }
