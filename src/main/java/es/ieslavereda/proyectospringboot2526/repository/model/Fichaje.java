@@ -20,7 +20,16 @@ public class Fichaje {
     @Column(name = "tipo", nullable = false)
     private String tipo;
 
-    // ---- GETTERS Y SETTERS ----
+    @Column(name = "id_turno", nullable = false)
+    private int idTurno;
+
+    public int getIdTurno() {
+        return idTurno;
+    }
+
+    public void setIdTurno(int idTurno) {
+        this.idTurno = idTurno;
+    }
 
     public int getIdFichaje() {
         return idFichaje;
