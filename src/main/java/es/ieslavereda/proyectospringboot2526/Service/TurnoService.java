@@ -82,10 +82,7 @@ public class TurnoService {
         }
     }
 
-    // =========================================================
     // PRODUCCIÓN
-    // =========================================================
-
     public void generarProduccion(List<Usuario> usuarios, LocalDate inicio, LocalDate fin) {
         for (LocalDate fecha = inicio; !fecha.isAfter(fin); fecha = fecha.plusDays(1)) {
             if (fecha.getDayOfWeek().getValue() <= 5) {
