@@ -1,5 +1,4 @@
 package es.ieslavereda.proyectospringboot2526.Controller;
-
 import es.ieslavereda.proyectospringboot2526.Service.VacacionesService;
 import es.ieslavereda.proyectospringboot2526.repository.model.Vacaciones;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,10 @@ public class VacacionesController {
     public ResponseEntity<List<Vacaciones>> getVacaciones(@PathVariable int id) {
         return ResponseEntity.ok(vacacionesService.getByEmpleado(id));
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<Vacaciones> getById(@PathVariable int id) {
+        return ResponseEntity.ok(vacacionesService.getById(id));
+    }
 
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody Vacaciones v) {
@@ -26,6 +29,15 @@ public class VacacionesController {
             return ResponseEntity.ok(vacacionesService.solicitarVacaciones(v));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<?> actualizar(@RequestBody Vacaciones v) {
+        try {
+            return ResponseEntity.ok(vacacionesService.actualizarVacaciones(v));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al actualizar: " + e.getMessage());
         }
     }
 }

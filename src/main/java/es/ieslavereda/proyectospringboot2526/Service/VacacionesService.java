@@ -4,7 +4,6 @@ import es.ieslavereda.proyectospringboot2526.repository.VacacionesRepository;
 import es.ieslavereda.proyectospringboot2526.repository.model.Vacaciones;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -42,5 +41,12 @@ public class VacacionesService {
         v.setEstado("PENDIENTE");
 
         return vacacionesRepository.save(v);
+    }
+
+    public Vacaciones actualizarVacaciones(Vacaciones v) {
+        return vacacionesRepository.save(v);
+    }
+    public Vacaciones getById(int id) {
+        return vacacionesRepository.findById(id).orElseThrow(() -> new RuntimeException("No existe la vacación"));
     }
 }
