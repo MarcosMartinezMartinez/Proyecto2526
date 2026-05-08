@@ -15,14 +15,10 @@ public class TurnoController {
     @Autowired
     private TurnoService turnoService;
 
-    // GET ALL
-
     @GetMapping
     public ResponseEntity<List<Turno>> getAllTurnos() {
         return ResponseEntity.ok(turnoService.getAllTurnos());
     }
-
-    // GET BY ID
 
     @GetMapping("/{id}")
     public ResponseEntity<Turno> getTurno(@PathVariable int id) {
@@ -35,8 +31,6 @@ public class TurnoController {
 
         return ResponseEntity.ok(turno);
     }
-
-    // GET BY EMPLEADO
 
     @GetMapping("/empleado/{idEmpleado}")
     public ResponseEntity<?> getTurnosByEmpleado(@PathVariable int idEmpleado) {
@@ -56,21 +50,20 @@ public class TurnoController {
         }
     }
 
-    // CREATE
-
     @PostMapping
     public ResponseEntity<Turno> addTurno(@RequestBody Turno turno) {
         return ResponseEntity.ok(turnoService.addTurno(turno));
     }
 
-    // UPDATE
+    @PostMapping("/manual")
+    public ResponseEntity<Turno> addTurnoManual(@RequestBody Turno turno) {
+        return ResponseEntity.ok(turnoService.addTurno(turno));
+    }
 
     @PutMapping
     public ResponseEntity<Turno> updateTurno(@RequestBody Turno turno) {
         return ResponseEntity.ok(turnoService.updateTurno(turno));
     }
-
-    // DELETE
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Turno> deleteTurno(@PathVariable int id) {

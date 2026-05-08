@@ -21,8 +21,6 @@ public class TurnoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-
-
     @PostConstruct
     public void init() {
         generarTurnosMesActual();
@@ -56,7 +54,6 @@ public class TurnoService {
         }
         return t;
     }
-
 
 
     public void generarTurnosMesActual() {
@@ -117,7 +114,6 @@ public class TurnoService {
         }
     }
 
-
     public void generarOficina(Usuario u, LocalDate inicio, LocalDate fin) {
 
         for (LocalDate fecha = inicio; !fecha.isAfter(fin); fecha = fecha.plusDays(1)) {
@@ -137,13 +133,9 @@ public class TurnoService {
         }
     }
 
-
-
     public void generarTurnosParaNuevoUsuario(Usuario u) {
         generarTurnosMesActual();
     }
-
-
 
     private boolean turnoExiste(int idEmpleado, String tipo, LocalDate fecha) {
         return turnoRepository.existsByIdEmpleadoAndTipoTurnoAndFechaInicioStartingWith(

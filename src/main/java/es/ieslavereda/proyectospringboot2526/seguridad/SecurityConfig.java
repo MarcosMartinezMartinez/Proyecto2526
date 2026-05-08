@@ -30,13 +30,12 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // 🔐 BCrypt obligatorio
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // CORS para frontend
+    //CORS para frontend
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 

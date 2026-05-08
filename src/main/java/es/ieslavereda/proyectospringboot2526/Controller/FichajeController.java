@@ -16,13 +16,11 @@ public class FichajeController {
     @Autowired
     private FichajeService fichajeService;
 
-    // Obtener todos los fichajes
     @GetMapping
     public ResponseEntity<List<Fichaje>> getAllFichajes() {
         return ResponseEntity.ok(fichajeService.getAllFichajes());
     }
 
-    // Obtener un fichaje por id
     @GetMapping("/{id}")
     public ResponseEntity<?> getFichaje(@PathVariable int id) {
         Fichaje fichaje = fichajeService.getFichaje(id);
@@ -33,29 +31,23 @@ public class FichajeController {
         return ResponseEntity.ok(fichaje);
     }
 
-
-    // Obtener fichajes por empleado
     @GetMapping("/empleado/{idEmpleado}")
     public ResponseEntity<?> getFichajesByEmpleado(@PathVariable int idEmpleado) {
         List<Fichaje> fichajes = fichajeService.getFichajesByEmpleado(idEmpleado);
         return ResponseEntity.ok(fichajes);
     }
 
-
-    // Crear un fichaje
     @PostMapping
     public ResponseEntity<Fichaje> addFichaje(@RequestBody Fichaje fichaje) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(fichajeService.addFichaje(fichaje));
     }
 
-    // Actualizar un fichaje
     @PutMapping
     public ResponseEntity<Fichaje> updateFichaje(@RequestBody Fichaje fichaje) {
         return ResponseEntity.ok(fichajeService.updateFichaje(fichaje));
     }
 
-    // Eliminar un fichaje por id
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteFichaje(@PathVariable int id) {
         Fichaje fichaje = fichajeService.deleteFichaje(id);

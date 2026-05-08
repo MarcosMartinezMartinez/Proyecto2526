@@ -36,11 +36,9 @@ public class Usuario {
     @Column(name = "tipo_puesto", nullable = false)
     private String tipoPuesto;
 
-    // 🔹 OBLIGATORIO para JPA
     public Usuario() {
     }
 
-    // 🔹 Constructor cómodo (sin ID)
     public Usuario(String nombre, String apellidos, String email, String contraseña,
                    String rol, String fechaAlta, boolean activo, String tipoPuesto) {
         this.nombre = nombre;

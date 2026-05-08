@@ -16,6 +16,8 @@ public class UsuarioService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private TurnoService turnoService;
 
     public List<Usuario> getAllUsuarios() {
         return usuarioRepository.findAll();
@@ -29,7 +31,6 @@ public class UsuarioService {
         return usuarioRepository.findByEmail(email);
     }
 
-    // 🔐 LOGIN REAL
     public Usuario login(String email, String password) {
 
         Usuario u = usuarioRepository.findByEmail(email);
@@ -43,10 +44,13 @@ public class UsuarioService {
         return null;
     }
 
-    // 🔐 CREAR USUARIO (ENCRIPTADO)
     public Usuario addUsuario(Usuario usuario) {
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
-        return usuarioRepository.save(usuario);
+        Usuario guardado = usuarioRepository.save(usuario);
+
+        turnoService.generarTurnosParaNuevoUsuario(guardado);
+
+        return guardado;
     }
 
     public void deleteUsuario(int id) {
